@@ -1,0 +1,15 @@
+title: "cnx has spoken"
+description: "A simple Jekyll theme with a JSON-like index."
+
+highlighter: rouge
+rouge:
+  theme: github
+
+collections:
+  my_posts:
+    output: true
+    permalink: /posts/:title.md
+
+markdown: kramdown
+kramdown:
+  input: GFM

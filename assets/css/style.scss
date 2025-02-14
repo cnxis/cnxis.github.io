@@ -1,0 +1,97 @@
+---
+# Processed by Jekyll into /assets/css/style.css
+---
+
+/* Embed Hack fonts (regular + italic). */
+@font-face {
+  font-family: 'Hack';
+  src: url('{{ "/assets/fonts/hack-regular-subset.woff2" | relative_url }}') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hack';
+  src: url('{{ "/assets/fonts/hack-italic-subset.woff2" | relative_url }}') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Global resets/styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;            /* Black background */
+  color: #D7D5D4;             /* Light-gray text */
+  font-family: 'Hack', monospace;
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+p {
+  /* Remove extra spacing so each line sits directly under the previous one */
+  margin: 0;
+}
+
+.site-title {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+main {
+  width: 90%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.json-container {
+  text-align: left;  /* Left-align for a more authentic "JSON" feel on index */
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+}
+
+/* Center content specifically on the 404 page */
+.json-container.center-404 {
+  text-align: center;
+}
+
+.post-content {
+  text-align: left; /* Changed from center to left */
+  margin-top: 2rem;
+}
+
+/* New rule: Center only the images inside posts */
+.post-content img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.back-home-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Indentation classes to mimic JSON nesting */
+.indent-level-1 {
+  margin-left: 2em;
+}
+.indent-level-2 {
+  margin-left: 4em;
+}
+
+/* Basic responsiveness */
+@media (max-width: 600px) {
+  body {
+    font-size: 18px;
+  }
+  main {
+    width: 95%;
+  }
+  .json-container {
+    width: 95%;
+  }
+}
