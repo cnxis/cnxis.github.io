@@ -8,8 +8,18 @@ rouge:
 collections:
   my_posts:
     output: true
-    permalink: /posts/:title.md
+    permalink: /:path/
 
+defaults:
+  - scope:
+      path: "_my_posts/en"
+    values:
+      lang: en
+  - scope:
+      path: "_my_posts/pt"
+    values:
+      lang: pt
+      
 markdown: kramdown
 kramdown:
   input: GFM

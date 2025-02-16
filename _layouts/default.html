@@ -2,12 +2,13 @@
 <html lang="en">
   {% include head.html %}
   <body>
-    <header>
+    <div class="title-container">
       <h1 class="site-title">{{ site.title }}</h1>
-    </header>
-
+      <a href="{{ "/" | relative_url }}" class="title-link"></a>
+    </div>
     <main>
       {{ content }}
     </main>
   </body>
 </html>
+

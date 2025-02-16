@@ -1,2 +1,5 @@
-// Minimal JS file. Add anything you want here.
-console.log("JS loaded successfully!");
+// Minimal JS file. Add any additional scripts here.
+document.addEventListener('DOMContentLoaded', (event) => {
+    hljs.highlightAll();
+  });
+  

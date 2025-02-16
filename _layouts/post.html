@@ -2,11 +2,23 @@
 layout: default
 ---
 
-<article class="post-content">
-  {{ content }}
-</article>
+<div class="post-container">
+  {% assign current_lang = page.lang %}
+  {% assign url_parts = page.url | split: '/' %}
+  {% assign post_slug = url_parts[2] %}
 
-<!-- "Back to Home" link for every post -->
-<div class="back-home-link">
-  <a href="/">Back to Home</a>
+  <div class="lang-switcher">
+    {% if current_lang == 'en' %}
+      <a href="/pt/{{ post_slug }}/">{{ 'pt-BR' }}</a>
+      <span> | </span>
+      <span class="current-lang">{{ 'en-US' }}</span>
+    {% else %}
+      <span class="current-lang">{{ 'pt-BR' }}</span>
+      <span> | </span>
+      <a href="/en/{{ post_slug }}/">{{ 'en-US' }}</a>
+    {% endif %}
+  </div>
+  <div class="post-content">
+    {{ content }}
+  </div>
 </div>

@@ -1,9 +1,10 @@
 ---
 layout: post
-title: "RSA for the curious"
+title: "RSA for the Curious"
+lang: en
 ---
 
-# RSA for the Curious  
+# RSA for the Curious 
 
 When researching encryption algorithms, we often come across the famous *Rivest-Shamir-Adleman Algorithm*, or simply RSA. But what exactly is it, how does it work, and what guarantees do we have that it's actually secure? These are the questions I intend to dissect in this article.  
 
@@ -100,7 +101,7 @@ This results in:
 
 Since **(b^e)^d ≡ b mod N**, the decrypted message is guaranteed to match the original message. This follows from number theory principles, particularly Euler's theorem and Fermat’s little theorem.  
 
-## Why Is It Secure?  
+## Why Is It "safe"?  
 
 To break the encryption, one must determine the private key **(d, N)**. The public key **(e, N)** already provides **N**, so an attacker needs to find **d**.  
 
