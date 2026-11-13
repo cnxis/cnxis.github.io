@@ -2,23 +2,27 @@
 layout: default
 ---
 
-<div class="post-container">
-  {% assign current_lang = page.lang %}
-  {% assign url_parts = page.url | split: '/' %}
-  {% assign post_slug = url_parts[2] %}
-
-  <div class="lang-switcher">
-    {% if current_lang == 'en' %}
-      <a href="/pt/{{ post_slug }}/">{{ 'pt-BR' }}</a>
-      <span> | </span>
-      <span class="current-lang">{{ 'en-US' }}</span>
-    {% else %}
-      <span class="current-lang">{{ 'pt-BR' }}</span>
-      <span> | </span>
-      <a href="/en/{{ post_slug }}/">{{ 'en-US' }}</a>
-    {% endif %}
+{% assign words = content | strip_html | number_of_words %}
+{% assign notes = site.my_posts | where: 'lang', 'en' | sort: 'order' %}
+<article class="article">
+  <header class="article-header">
+    <a class="back-link" href="{{ '/' | relative_url }}#index">← Back to index</a>
+    <p class="eyebrow">NOTE {{ page.order | prepend: '00' | slice: -2, 2 }} <span>/</span> {{ page.category | default: 'Cryptography' }} <span>/</span> {{ words | divided_by: 200 | plus: 1 }} MIN READ</p>
+    <h1>{{ page.title | escape }}</h1>
+  </header>
+  <div class="article-grid">
+    <aside class="article-sidebar" aria-label="Article navigation">
+      <details class="toc" open>
+        <summary>On this page</summary>
+        <ol data-toc><li><a href="#article-content">Read the note</a></li></ol>
+      </details>
+    </aside>
+    <div class="post-content" id="article-content">{{ content }}</div>
   </div>
-  <div class="post-content">
-    {{ content }}
-  </div>
-</div>
+  <footer class="article-footer">
+    {% for note in notes %}{% if note.url != page.url %}
+    <a class="next-note" href="{{ note.url | relative_url }}"><span>Next post</span><strong>{{ note.title | escape }}</strong><span aria-hidden="true">↗</span></a>
+    {% endif %}{% endfor %}
+    <a class="back-link" href="{{ '/' | relative_url }}#index">← All notes</a>
+  </footer>
+</article>

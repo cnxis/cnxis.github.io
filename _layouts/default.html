@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
   {% include head.html %}
-  <body>
-    <div class="title-container">
-      <h1 class="site-title">{{ site.title }}</h1>
-      <a href="{{ "/" | relative_url }}" class="title-link"></a>
+  <body id="top" class="{% if page.layout == 'post' %}is-post{% else %}is-index{% endif %}">
+    <div class="ambient-background" aria-hidden="true"><div data-background></div><div class="background-veil"></div></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="reading-progress" aria-hidden="true"></div>
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="wordmark" href="{{ '/' | relative_url }}" aria-label="cnx — home">
+          cnx<span class="wordmark-suffix">.sh</span>
+        </a>
+        <nav aria-label="Main navigation">
+          <a href="{{ '/' | relative_url }}#index"{% if page.url == '/' %} aria-current="page"{% endif %}>Index</a>
+          <span class="nav-slash" aria-hidden="true">/</span>
+          <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}>Whoami</a>
+          <span class="nav-slash" aria-hidden="true">/</span>
+          <a href="mailto:hi@cnx.sh">Contact <span aria-hidden="true">↗</span></a>
+        </nav>
+      </header>
+      <main id="main">{{ content }}</main>
+      <footer class="site-footer">
+        <a class="footer-signature" href="{{ '/' | relative_url }}">cnx has spoken<span aria-hidden="true">_</span></a>
+        <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+      </footer>
     </div>
-    <main>
-      {{ content }}
-    </main>
   </body>
 </html>
-

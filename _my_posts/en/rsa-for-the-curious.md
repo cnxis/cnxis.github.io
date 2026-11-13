@@ -2,120 +2,167 @@
 layout: post
 title: "RSA for the Curious"
 lang: en
+order: 1
+category: Cryptography
+index_title: "RSA for the curious"
+description: "Prime numbers, public keys, and the mathematics behind a secret."
 ---
 
-# RSA for the Curious 
+When researching encryption algorithms, we often come across RSA, named after Rivest, Shamir, and Adleman. What does it do, how does it work, and where does its security come from? Let's work through the mathematics with a small example.
 
-When researching encryption algorithms, we often come across the famous *Rivest-Shamir-Adleman Algorithm*, or simply RSA. But what exactly is it, how does it work, and what guarantees do we have that it's actually secure? These are the questions I intend to dissect in this article.  
+A little background on [Diffie–Hellman key exchange](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange) helps distinguish shared secrets from public and private keys. RSA uses a different construction, but the question is similar: how can two people communicate without first sharing a secret key?
 
-Before proceeding, I truly recommend reading this: [Diffie-Hellman](https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange). It clarifies some concepts that may arise throughout this text, such as how symmetric and asymmetric keys work.  
+## The Fundamental Theorem of Arithmetic
 
-With that said, let's move on to some necessary explanations that lay the groundwork before diving into the algorithm itself. These explanations will help clarify the processes involved in encrypting any given content.  
+The **fundamental theorem of arithmetic** states that every integer greater than one has a prime factorization that is unique up to the order of its factors.
 
-## The Fundamental Theorem of Arithmetic  
+```text
+n = p₁ × p₂ × … × pᵣ
+```
 
-The **Fundamental Theorem of Arithmetic** states that:  
+For existence, consider an integer `n > 1`:
 
-If **n** is a natural number where **n > 1**, then there exist prime numbers **p₁, p₂, p₃, ..., pᵣ**, with **r ≥ 1**, such that:  
-**n = p₁ × p₂ × p₃ × ... × pᵣ**.  
+- If `n` is prime, its factorization consists of `n` itself.
+- If `n` is composite, write it as a product of smaller integers and continue factoring those integers. The process eventually reaches prime factors.
 
-Apart from the order of the prime factors, this factorization is unique. Let’s break it down:  
+For uniqueness, suppose the same integer has two prime factorizations:
 
-Given any number **x**, we want to prove that **x** can be factored into prime numbers. We’ll use an inductive approach:  
-- Starting with **x = 2**, we see that it has a prime factorization since it is itself a prime number. We call this the **trivial factorization**.  
-- If **x > 2** and is also prime, it admits the trivial factorization just like 2. Otherwise, **x** has some positive divisor **d**, such that **x = d × q**. Similarly, if **d** or **q** are prime, they also admit trivial factorization.  
+```text
+p₁ × p₂ × … × pₖ = q₁ × q₂ × … × qₛ
+```
 
-Once we have proven the existence of prime factorization, we must show that it is unique.  
+By Euclid's lemma, `p₁` must divide one of the primes on the right, so those two primes are equal. Cancel them and repeat. Both lists must contain the same prime factors, with the same multiplicities.
 
-Let's assume that **x** can be factored in two different ways:  
-**x = p₁ × p₂ × ... × pₖ = q₁ × q₂ × ... × qₛ**.  
+## Prime Numbers
 
-Since both factorizations are valid and arranged in ascending order, we conclude that **p₁ = q₁**. Canceling these from both sides, we get:  
-**p₂ × ... × pₖ = q₂ × ... × qₛ**.  
+A **prime number** is an integer greater than one whose only positive divisors are one and itself.
 
-By induction, we prove that the factorization is unique for any natural number.  
+Some useful divisibility checks:
 
-## Prime Numbers  
+- **2:** the last digit is even.
+- **3:** the sum of the digits is divisible by three.
+- **4:** the final two digits form a number divisible by four.
+- **5:** the last digit is zero or five.
+- **6:** the number is divisible by both two and three.
+- **7:** subtract twice the final digit from the remaining number; the original is divisible by seven exactly when that result is.
 
-A **prime number** is defined as any natural number greater than 1 that is divisible only by 1 and itself.  
+These checks help eliminate composite numbers. To test an integer, it is sufficient to check prime divisors up to its square root.
 
-We can eliminate some numbers using basic divisibility rules:  
-- **Divisibility by 2:** All even numbers (ending in 0, 2, 4, 6, or 8) are divisible by 2.  
-- **Divisibility by 3:** A number is divisible by 3 if the sum of its digits is also divisible by 3.  
-- **Divisibility by 4:** A number is divisible by 4 if its last two digits form a number that is divisible by 4.  
-- **Divisibility by 5:** Numbers ending in 0 or 5 are divisible by 5.  
-- **Divisibility by 6:** A number is divisible by 6 if it is both even and divisible by 3.  
-- **Divisibility by 7:** A number is divisible by 7 if twice the last digit, subtracted from the rest of the number, results in a multiple of 7.  
+![A sieve highlighting the prime numbers below 100]({{ '/assets/images/rsa/skey-img4.png' | relative_url }}){: .prime-sieve}
 
-Using these rules, we can determine all prime numbers below 100:  
+The highlighted numbers are the primes below 100.
 
-![Prime Numbers](https://s1.static.brasilescola.uol.com.br/img/2015/11/numeros-primos-.jpg)  
+## Modular Arithmetic and Congruences
 
-The numbers highlighted in yellow are prime since they do not fit any of the divisibility rules above.  
+Two integers are **congruent modulo `m`** when division by `m` leaves the same remainder.
 
-## Modular Arithmetic and Congruences  
+```text
+32 = 2 × 12 + 8
+ 8 = 0 × 12 + 8
 
-A **congruence** is a relationship between two numbers that, when divided by a third number (the modulus), leave the same remainder.  
+32 ≡ 8 (mod 12)
+```
 
-For example, **32 is congruent to 8 modulo 12**, since:  
-**32 = 2 × 12 + 8** and **8 = 0 × 12 + 8**.  
+More generally, for integers `a` and `b` and a positive modulus `m`:
 
-In general, for integers **a** and **b**, and a positive integer **m**, we write:  
-**a ≡ b (mod m)** if and only if **a mod m = b mod m**.  
+```text
+a ≡ b (mod m)  ⇔  a mod m = b mod m
 
-Example:  
-**379 ≡ 3 (mod 8)**  
+379 ≡ 3 (mod 8)
+```
 
-## The RSA Encryption Algorithm  
+The modulus gives us a finite space in which to perform arithmetic. RSA relies on exponentiation inside that space.
 
-The RSA algorithm is an asymmetric encryption method based on the mathematics of prime numbers. Here's how it works:  
+## The RSA Encryption Algorithm
 
-1. Choose two distinct prime numbers **p** and **q**.  
-2. Define **N = p × q** and **φ(N) = (p - 1) × (q - 1)**.  
-3. Choose a number **e**, which is part of the public key, such that **GCD(e, φ(N)) = 1**, and **1 < e < φ(N)**.  
-4. Solve the congruence **e × d ≡ 1 (mod φ(N))** to find **d**, which is part of the private key.  
-5. Convert the message into numbers using a pre-defined table (e.g., ASCII), then break it into blocks **b**, ensuring **1 ≤ b < N**.  
-6. Encrypt each block using the public key **(e, N)**:  
-   **C(b) = b^e mod N** (this is the encrypted message).  
-7. Decrypt using the private key **(d, N)**:  
-   **D(C(b)) = C(b)^d mod N**, ensuring **1 ≤ D(C(b)) < N**.  
-8. Convert the decrypted numbers back into characters using the same table from step 5.  
+For this textbook example, choose two distinct primes, `p` and `q`, and use their product as the modulus.
 
-Let's see an example for **φ(697)**:  
+1. Compute `N = p × q`.
+2. Compute `φ(N) = (p − 1) × (q − 1)`.
+3. Choose a public exponent `e` with `1 < e < φ(N)` and `gcd(e, φ(N)) = 1`.
+4. Find the private exponent `d`, the multiplicative inverse of `e` modulo `φ(N)`.
+5. Represent a message as integers `m` with `0 ≤ m < N`.
+6. Encrypt each integer with the public key `(N, e)`.
+7. Decrypt with the private key `(N, d)`.
 
-**φ(N) = (17 - 1) × (41 - 1) = 640**  
-Choosing **e = 13**, since **GCD(640, 13) = 1**, our public key is **(697, 13)**.  
+```text
+e × d ≡ 1 (mod φ(N))
 
-For the word **"TURING"**, we compute:  
-- **T = 19^13 mod 697**  
-- **U = 20^13 mod 697**  
-- **R = 17^13 mod 697**  
-- **I = 09^13 mod 697**  
-- **N = 13^13 mod 697**  
-- **G = 07^13 mod 697**  
+Encryption: c = mᵉ mod N
+Decryption: m = cᵈ mod N
+```
 
-This results in:  
-`15 692 391 501 421 176`  
+### A Small Worked Example
 
-## Why Does This Method Work?  
+Take `p = 17` and `q = 41`:
 
-Since **(b^e)^d ≡ b mod N**, the decrypted message is guaranteed to match the original message. This follows from number theory principles, particularly Euler's theorem and Fermat’s little theorem.  
+```text
+N    = 17 × 41 = 697
+φ(N) = 16 × 40 = 640
 
-## Why Is It "safe"?  
+e = 13
+d = 197
 
-To break the encryption, one must determine the private key **(d, N)**. The public key **(e, N)** already provides **N**, so an attacker needs to find **d**.  
+13 × 197 = 2561 = 4 × 640 + 1
+```
 
-Since **N = p × q**, an attacker would need to factorize **N** to determine **p** and **q**. However, factoring large integers is computationally infeasible with current technology.  
+The public key is `(697, 13)`; the private key is `(697, 197)`.
 
-For example, with a **256-bit key** (**k = 2²⁵⁶**), a supercomputer performing **33.86 petaflops (quadrillions of operations per second)** would still take:  
+For the word **TURING**, use the simple mapping `A = 0, B = 1, …, Z = 25`. This is an illustration, not ASCII encoding.
 
-**2²⁵⁶ / (33.86 × 2⁵⁰) × 365 × 24 × 60 × 60 ≈ 9.63 × 10⁵² years**  
+| Letter | Plaintext `m` | Ciphertext `m¹³ mod 697` |
+| :----- | -----------: | ----------------------: |
+| T | 19 | 15 |
+| U | 20 | 692 |
+| R | 17 | 391 |
+| I | 8 | 349 |
+| N | 13 | 421 |
+| G | 6 | 639 |
 
-Now imagine the complexity for a **4096-bit key**!  
+```text
+Plaintext:  19  20   17    8   13    6
+Ciphertext: 15  692  391  349  421  639
+```
 
-## References  
+You can verify both directions with Python:
 
-- [RSA Cryptography, by Daniele Helena Bonfim](https://upload.wikimedia.org/wikipedia/commons/1/1b/ASCII-Table-wide.svg)  
-- [A Guide for Teachers – RSA Encryption](https://www.amsi.org.au/teacher_modules/pdfs/Maths_delivers/Encryption5.pdf)  
-- [Fundamental Theorem of Arithmetic](https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic)  
-- [Introduction to Modular Arithmetic](https://www.cin.ufpe.br/~gdcc/matdis/aulas/aritmeticaModular.pdf)  
+```python
+modulus = 17 * 41
+public_exponent = 13
+private_exponent = pow(public_exponent, -1, 16 * 40)
+
+message = "TURING"
+plaintext = [ord(letter) - ord("A") for letter in message]
+ciphertext = [pow(value, public_exponent, modulus) for value in plaintext]
+recovered = [pow(value, private_exponent, modulus) for value in ciphertext]
+
+assert recovered == plaintext
+print(ciphertext)  # [15, 692, 391, 349, 421, 639]
+print("".join(chr(value + ord("A")) for value in recovered))  # TURING
+```
+
+## Why Does This Method Work?
+
+The exponents were chosen so that `e × d = 1 + k × φ(N)` for some integer `k`. For messages coprime to `N`, Euler's theorem gives:
+
+```text
+mᵉᵈ ≡ m × (m^φ(N))ᵏ ≡ m (mod N)
+```
+
+The Chinese remainder theorem extends the argument to every message representative in the range `0 ≤ m < N`, including those divisible by `p` or `q`.
+
+## What Makes RSA Hard to Break?
+{: #why-is-it-safe}
+
+Factoring `N` into `p` and `q` lets us compute `φ(N)` and then recover `d`. Multiplying large primes is straightforward; reversing that multiplication becomes difficult as the modulus grows.
+
+The number of possible bit strings is not a direct estimate of the work needed to factor an RSA modulus. A `256-bit` RSA modulus does not provide `256-bit` security, and the small numbers above are only useful for explaining the arithmetic.
+
+Textbook RSA also preserves patterns: the same message representative produces the same ciphertext. Real encryption schemes add randomized encoding, such as RSAES-OAEP, described in [RFC 8017](https://www.rfc-editor.org/rfc/rfc8017.html#section-7.1).
+
+## References
+
+- [RSA cryptography specifications — RFC 8017](https://www.rfc-editor.org/rfc/rfc8017.html)
+- [A guide for teachers — RSA encryption](https://www.amsi.org.au/teacher_modules/pdfs/Maths_delivers/Encryption5.pdf)
+- [Fundamental theorem of arithmetic](https://en.wikipedia.org/wiki/Fundamental_theorem_of_arithmetic)
+- [Introduction to modular arithmetic](https://www.cin.ufpe.br/~gdcc/matdis/aulas/aritmeticaModular.pdf)

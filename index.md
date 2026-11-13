@@ -1,30 +1,41 @@
 ---
 layout: default
-lang: "en"
+lang: en
+shader: true
 ---
 
-<div class="json-container">
-<p>{</p>
-<p class="indent-level-1">"path": "/",</p>
-<p class="indent-level-1">"greeting": "welcome aboard.",</p>
-<p class="indent-level-1">"content": [</p>
+{% assign notes = site.my_posts | where: 'lang', 'en' | sort: 'order' %}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <h1 id="hero-title">cnx has<br>spoken<span class="cursor">_</span></h1>
+  </div>
+  <div class="signal" aria-hidden="true">
+    <div class="signal-frame">
+      <img class="signal-fallback" src="{{ '/assets/images/halftone-flowers.png' | relative_url }}" alt="" width="960" height="720">
+      <div class="signal-shader" data-halftone data-image="{{ '/assets/images/flowers.webp' | relative_url }}" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
 
-<p class="indent-level-2">"contact": [</p>
-<p class="indent-level-3">"office": "<a href="https://www.google.com/maps/@48.3732225,-123.586822,3a,48.2y,232.23h,66.6t/data=!3m8!1e1!3m6!1s3FtRkV-ZSnIGk-5std5Dlg!2e0!5s20140601T000000!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D23.39976161683363%26panoid%3D3FtRkV-ZSnIGk-5std5Dlg%26yaw%3D232.23087536051523">1293 Liberty Dr</a>",</p>
-<p class="indent-level-3">"email": "contact@cnx.sh",</p>
-<p class="indent-level-2">],</p>
 
-<p class="indent-level-2">"profiles": [</p>
-<p class="indent-level-3">"<a href="https://www.linkedin.com/in/eliabenasc">linkedIn</a>",</p>
-<p class="indent-level-3">"<a href="https://github.com/cnxis">gitHub</a>",</p>
-<p class="indent-level-3">"<a href="https://app.hackthebox.com/profile/48571">hackthebox</a>",</p>
-<p class="indent-level-2">],</p>
-
-<p class="indent-level-2">"posts": [</p>
-{% assign lang_posts = site.my_posts | where: "lang", page.lang %}
-{% for post in lang_posts %}
-  <p class="indent-level-3">"<a href="{{ post.url }}">{{ post.title }}</a>",</p>
-{% endfor %}
-<p class="indent-level-2">]</p>
-<p class="indent-level-1">]}</p>
-</div>
+<section class="notes-section" id="index" aria-labelledby="index-title">
+  <div class="section-heading">
+    <h2 id="index-title">Posts</h2>
+    <span class="entry-count">[ {{ notes.size | prepend: '00' | slice: -2, 2 }} ENTRIES ]</span>
+  </div>
+  <div class="index-columns" aria-hidden="true"><span>NO.</span><span>ENTRY</span><span>FILE UNDER</span><span>READ</span><span></span></div>
+  <ol class="note-index">
+    {% for post in notes %}
+    {% assign words = post.content | strip_html | number_of_words %}{% assign minutes = words | divided_by: 200 | plus: 1 %}
+    <li>
+      <a class="note-row" href="{{ post.url | relative_url }}">
+        <span class="note-number" aria-hidden="true">{{ forloop.index | prepend: '00' | slice: -2, 2 }}</span>
+        <span class="note-summary"><span class="note-title">{{ post.title | escape }}</span></span>
+        <span class="note-category">{{ post.category | default: 'Cryptography' }}</span>
+        <span class="note-time">{{ minutes }} min<span class="sr-only"> read</span></span>
+        <span class="note-arrow" aria-hidden="true">↗</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</section>

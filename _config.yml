@@ -1,9 +1,9 @@
 title: "cnx has spoken"
-description: "A simple Jekyll theme with a JSON-like index."
-
+description: "cnx has spoken"
+url: "https://cnx.sh"
+baseurl: ""
+lang: en
 highlighter: rouge
-rouge:
-  theme: github
 
 collections:
   my_posts:
@@ -15,11 +15,19 @@ defaults:
       path: "_my_posts/en"
     values:
       lang: en
-  - scope:
-      path: "_my_posts/pt"
-    values:
-      lang: pt
-      
+
 markdown: kramdown
 kramdown:
   input: GFM
+  syntax_highlighter: rouge
+
+exclude:
+  - AGENTS.md
+  - README.md
+  - assets/js/paper-shaders/README.md
+  - Gemfile
+  - Gemfile.lock
+  - scripts
+  - node_modules
+  - package.json
+  - package-lock.json
