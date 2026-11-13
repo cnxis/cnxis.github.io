@@ -4,6 +4,7 @@ layout: default
 
 {% assign words = content | strip_html | number_of_words %}
 {% assign notes = site.my_posts | where: 'lang', 'en' | sort: 'order' %}
+<div class="reading-progress" aria-hidden="true"></div>
 <article class="article">
   <header class="article-header">
     <a class="back-link" href="{{ '/' | relative_url }}#index">← Back to index</a>

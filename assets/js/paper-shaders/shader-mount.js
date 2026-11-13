@@ -3,6 +3,7 @@
  *       https://github.com/paper-design/shaders       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+// Repository subset: unused public convenience methods and element predicate removed.
 import { vertexShaderSource } from "./vertex-shader.js";
 const DEFAULT_MAX_PIXEL_COUNT = 1920 * 1080 * 4;
 class ShaderMount {
@@ -337,16 +338,6 @@ class ShaderMount {
       }
     });
   };
-  /** Gets the current total animation time from 0ms */
-  getCurrentFrame = () => {
-    return this.currentFrame;
-  };
-  /** Set a frame to get a deterministic result, frames are literally just milliseconds from zero since the animation started */
-  setFrame = (newFrame) => {
-    this.currentFrame = newFrame;
-    this.lastRenderTime = performance.now();
-    this.renderUnlessAnimating();
-  };
   /** Set an animation speed (or 0 to stop animation) */
   setSpeed = (newSpeed = 1) => {
     this.speed = newSpeed;
@@ -365,28 +356,6 @@ class ShaderMount {
     if (this.rafId !== null && newSpeed === 0) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
-    }
-  };
-  /** Set the maximum pixel count for the shader, this will limit the number of pixels that will be rendered */
-  setMaxPixelCount = (newMaxPixelCount = DEFAULT_MAX_PIXEL_COUNT) => {
-    this.maxPixelCount = newMaxPixelCount;
-    this.handleResize();
-  };
-  /** Set the minimum pixel ratio for the shader */
-  setMinPixelRatio = (newMinPixelRatio = 2) => {
-    this.minPixelRatio = newMinPixelRatio;
-    this.handleResize();
-  };
-  /** Update the uniforms that are provided by the outside shader, can be a partial set with only the uniforms that have changed */
-  setUniforms = (newUniforms) => {
-    this.setUniformValues(newUniforms);
-    this.providedUniforms = { ...this.providedUniforms, ...newUniforms };
-    this.renderUnlessAnimating();
-  };
-  /** Render right away only when the rAF loop isn't running */
-  renderUnlessAnimating = () => {
-    if (this.rafId === null) {
-      this.render(performance.now());
     }
   };
   handleDocumentVisibilityChange = () => {
@@ -486,9 +455,6 @@ const defaultStyle = `@layer paper-shaders {
     }
   }
 }`;
-function isPaperShaderElement(element) {
-  return "paperShaderMount" in element;
-}
 function isSafari() {
   const ua = navigator.userAgent.toLowerCase();
   return ua.includes("safari") && !ua.includes("chrome") && !ua.includes("android");
@@ -515,6 +481,5 @@ function bestGuessBrowserZoom(doc) {
   return ratio;
 }
 export {
-  ShaderMount,
-  isPaperShaderElement
+  ShaderMount
 };

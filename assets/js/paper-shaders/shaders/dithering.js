@@ -3,8 +3,7 @@
  *       https://github.com/paper-design/shaders       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-import {
-} from "../shader-sizing.js";
+// Repository subset: unused sizing import and preset enums removed; GLSL unchanged.
 import { simplexNoise, declarePI, proceduralHash11, proceduralHash21 } from "../shader-utils.js";
 const ditheringFragmentShader = `#version 300 es
 precision mediump float;
@@ -248,23 +247,6 @@ void main() {
   fragColor = vec4(color, opacity);
 }
 `;
-const DitheringShapes = {
-  simplex: 1,
-  warp: 2,
-  dots: 3,
-  wave: 4,
-  ripple: 5,
-  swirl: 6,
-  sphere: 7
-};
-const DitheringTypes = {
-  "random": 1,
-  "2x2": 2,
-  "4x4": 3,
-  "8x8": 4
-};
 export {
-  DitheringShapes,
-  DitheringTypes,
   ditheringFragmentShader
 };

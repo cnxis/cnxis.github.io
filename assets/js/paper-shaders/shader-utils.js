@@ -3,6 +3,7 @@
  *       https://github.com/paper-design/shaders       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+// Repository subset: unused GLSL helpers and exports removed.
 const declarePI = `
 #define TWO_PI 6.28318530718
 #define PI 3.14159265358979323846
@@ -25,28 +26,6 @@ const proceduralHash21 = `
     p += dot(p, p + 19.19);
     return fract(p.x * p.y);
   }
-`;
-const proceduralHash22 = `
-  vec2 hash22(vec2 p) {
-    p = fract(p * vec2(0.3183099, 0.3678794)) + 0.1;
-    p += dot(p, p.yx + 19.19);
-    return fract(vec2(p.x * p.y, p.x + p.y));
-  }
-`;
-const textureRandomizerR = `
-  float randomR(vec2 p) {
-    vec2 uv = floor(p) / 100. + .5;
-    return texture(u_noiseTexture, fract(uv)).r;
-  }
-`;
-const textureRandomizerGB = `
-  vec2 randomGB(vec2 p) {
-    vec2 uv = floor(p) / 100. + .5;
-    return texture(u_noiseTexture, fract(uv)).gb;
-  }
-`;
-const colorBandingFix = `
-  color += 1. / 256. * (fract(sin(dot(.014 * gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453123) - .5);
 `;
 const simplexNoise = `
 vec3 permute(vec3 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
@@ -77,54 +56,10 @@ float snoise(vec2 v) {
   return 130.0 * dot(m, g);
 }
 `;
-const fiberNoise = `
-float fiberRandom(vec2 p) {
-  vec2 uv = floor(p) / 100.;
-  return texture(u_noiseTexture, fract(uv)).b;
-}
-
-float fiberValueNoise(vec2 st) {
-  vec2 i = floor(st);
-  vec2 f = fract(st);
-  float a = fiberRandom(i);
-  float b = fiberRandom(i + vec2(1.0, 0.0));
-  float c = fiberRandom(i + vec2(0.0, 1.0));
-  float d = fiberRandom(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  float x1 = mix(a, b, u.x);
-  float x2 = mix(c, d, u.x);
-  return mix(x1, x2, u.y);
-}
-
-float fiberNoiseFbm(in vec2 n, vec2 seedOffset) {
-  float total = 0.0, amplitude = 1.;
-  for (int i = 0; i < 4; i++) {
-    n = rotate(n, .7);
-    total += fiberValueNoise(n + seedOffset) * amplitude;
-    n *= 2.;
-    amplitude *= 0.6;
-  }
-  return total;
-}
-
-float fiberNoise(vec2 uv, vec2 seedOffset) {
-  float epsilon = 0.001;
-  float n1 = fiberNoiseFbm(uv + vec2(epsilon, 0.0), seedOffset);
-  float n2 = fiberNoiseFbm(uv - vec2(epsilon, 0.0), seedOffset);
-  float n3 = fiberNoiseFbm(uv + vec2(0.0, epsilon), seedOffset);
-  float n4 = fiberNoiseFbm(uv - vec2(0.0, epsilon), seedOffset);
-  return length(vec2(n1 - n2, n3 - n4)) / (2.0 * epsilon);
-}
-`;
 export {
-  colorBandingFix,
   declarePI,
-  fiberNoise,
   proceduralHash11,
   proceduralHash21,
-  proceduralHash22,
   rotation2,
-  simplexNoise,
-  textureRandomizerGB,
-  textureRandomizerR
+  simplexNoise
 };

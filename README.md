@@ -43,7 +43,6 @@ Create `_my_posts/en/descriptive-slug.md` with this front matter:
 layout: post
 lang: en
 title: "The full article title"
-index_title: "A short index title"
 description: "A one-sentence introduction."
 category: Cryptography
 order: 3

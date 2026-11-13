@@ -80,8 +80,7 @@ h1, h2, h3 { font-weight: 400; text-wrap: balance; }
 .site-header nav a[aria-current] { color: var(--green); text-decoration: underline; }
 .nav-slash { color: var(--line); pointer-events: none; user-select: none; }
 .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; line-height: 1.6; letter-spacing: .045em; text-transform: uppercase; }
-.status-dot { display: inline-block; flex: 0 0 7px; width: 7px; height: 7px; background: var(--green); }
-.accent, .cursor { color: var(--green); }
+.cursor { color: var(--green); }
 .hero { position: relative; isolation: isolate; display: flex; align-items: center; padding: 48px 0 36px; min-height: 560px; }
 .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(27, 30, 26, .9) 0%, rgba(27, 30, 26, .72) 42%, rgba(27, 30, 26, .16) 100%); }
 .hero-copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; min-width: 0; max-width: 740px; padding: 20px 0; }
@@ -173,7 +172,7 @@ h2 { font: 40px/1.1 var(--pixel); letter-spacing: -.02em; }
 /* A single square link tile for each original contact/profile URL. */
 .whoami { max-width: 1000px; margin: 0 auto; padding: 65px 0 85px; }
 .whoami h1 { margin: 0 0 38px; font: clamp(46px, 5.5vw, 72px)/1.08 var(--pixel); letter-spacing: -.025em; }
-.whoami-links { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.whoami-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
 .whoami-links li { min-width: 0; }
 .link-tile { display: flex; flex-direction: column; aspect-ratio: 1 / 1; min-width: 0; padding: 20px; border: 1px solid var(--line); background: var(--surface); }
 .link-tile-arrow { align-self: flex-end; margin-bottom: auto; color: var(--green); font: 23px/1 var(--pixel); }
@@ -181,10 +180,10 @@ h2 { font: 40px/1.1 var(--pixel); letter-spacing: -.02em; }
 .link-tile-detail { display: block; margin-top: 9px; color: var(--muted); font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
 .link-tile:hover { border-color: var(--green); background: var(--surface-hover); color: var(--ink); }
 .link-tile:hover .link-tile-title { color: var(--green); }
-@media (max-width: 1000px) { .whoami-links { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1000px) { .whoami-links { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) {
   .whoami { padding: 40px 0 50px; }
-  .whoami-links { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .whoami-links { gap: 12px; }
   .link-tile { padding: 16px; }
   .link-tile-title { font-size: 24px; }
 }
@@ -192,7 +191,6 @@ h2 { font: 40px/1.1 var(--pixel); letter-spacing: -.02em; }
 .error-code { font: clamp(130px, 20vw, 240px)/1.2 var(--pixel); letter-spacing: -.04em; }
 .error-code span { color: var(--green); }
 .not-found h1 { font: 38px/1.2 var(--pixel); }
-.not-found > p:not(.eyebrow) { margin-top: 22px; color: var(--muted); font-size: 14px; line-height: 1.7; }
 .not-found .text-link { margin-top: 28px; }
 
 @media (min-width: 1500px) { .hero h1 { font-size: 142px; } }
@@ -248,7 +246,6 @@ h2 { font: 40px/1.1 var(--pixel); letter-spacing: -.02em; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { transition: none !important; }
 }
 @media print {
   :root { color-scheme: light; --ink: #111; --muted: #444; --green: #243e1c; --line: #ccc; --surface: #eee; --code-background: #fff; --code-text: #111; }

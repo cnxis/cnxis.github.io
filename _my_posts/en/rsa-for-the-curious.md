@@ -4,7 +4,6 @@ title: "RSA for the Curious"
 lang: en
 order: 1
 category: Cryptography
-index_title: "RSA for the curious"
 description: "Prime numbers, public keys, and the mathematics behind a secret."
 ---
 

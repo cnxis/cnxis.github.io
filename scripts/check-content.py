@@ -9,7 +9,7 @@ for post in sorted((root / '_my_posts/en').glob('*.md')):
     source = post.read_text()
     assert source.startswith('---\n'), f'{post.name}: missing front matter'
     _, metadata, body = source.split('---', 2)
-    for key in ('layout', 'lang', 'title', 'index_title', 'description', 'category', 'order'):
+    for key in ('layout', 'lang', 'title', 'description', 'category', 'order'):
         assert re.search(rf'^{key}: .+', metadata, re.M), f'{post.name}: missing {key}'
     assert re.search(r'^lang: en$', metadata, re.M), f'{post.name}: articles must be English'
     code = None

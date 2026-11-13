@@ -3,7 +3,7 @@
  *       https://github.com/paper-design/shaders       *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-import {} from "../shader-sizing.js";
+// Repository subset: unused sizing import and preset enums removed; GLSL unchanged.
 import { declarePI, rotation2, proceduralHash21 } from "../shader-utils.js";
 const halftoneDotsFragmentShader = `#version 300 es
 precision mediump float;
@@ -303,18 +303,6 @@ void main() {
   fragColor = vec4(color, opacity);
 }
 `;
-const HalftoneDotsTypes = {
-  classic: 0,
-  gooey: 1,
-  holes: 2,
-  soft: 3
-};
-const HalftoneDotsGrids = {
-  square: 0,
-  hex: 1
-};
 export {
-  HalftoneDotsGrids,
-  HalftoneDotsTypes,
   halftoneDotsFragmentShader
 };

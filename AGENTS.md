@@ -22,7 +22,7 @@ The global background uses the self-hosted Dithering shader: simplex, 4×4, size
 
 ## Markdown & Code Conventions
 
-Use two-space indentation in templates, CSS, JavaScript, and PHP examples. Name articles with lowercase hyphenated slugs. Include `layout`, `lang: en`, `title`, `index_title`, `description`, `category`, and numeric `order` in front matter. The layout supplies the sole H1; start sections at H2, then H3.
+Use two-space indentation in templates, CSS, JavaScript, and PHP examples. Name articles with lowercase hyphenated slugs. Include `layout`, `lang: en`, `title`, `description`, `category`, and numeric `order` in front matter. The layout supplies the sole H1; start sections at H2, then H3.
 
 Always label fenced blocks (`php`, `html`, `python`, `text`). Use `text` for formulas, diagrams, and output; inline code for identifiers. Include `<?php` in PHP snippets. Separate prose and lists with blank lines; avoid manual line breaks for layout. Preserve whitespace and check sample arithmetic. Keep demonstration behavior explicit when correcting examples.
 
